@@ -7,7 +7,7 @@ class NotFoundHttpException extends Exception {
   constructor(message) {
     super(message || 'Not Found');
 
-    this.status = 400;
+    this.status = 404;
   }
 }
 
