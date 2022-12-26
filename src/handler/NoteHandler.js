@@ -2,16 +2,27 @@ const ModelNotFoundException = require('../exceptions/ModelNotFoundException');
 const Note = require('../models/Note');
 const NoteResource = require('../resources/NoteResource');
 
+/** @type {NoteHandler} */
+let _this;
+
 class NoteHandler {
+  constructor() {
+    if (_this === undefined) {
+      this.model = new Note();
+
+      _this = this;
+    }
+  }
+
   /**
    * @template {import("@hapi/hapi").ReqRef} Refs
    * @param {import("@hapi/hapi").Request<Refs>} request
    * @param {import("@hapi/hapi").ResponseToolkit<Refs>} h
    */
-  static index(request, h) {
+  index(request, h) {
     return h.response({
       status: 'success',
-      data: { notes: new NoteResource(new Note().all()).toResource() },
+      data: { notes: new NoteResource(_this.model.all()).toResource() },
     });
   }
 
@@ -20,13 +31,11 @@ class NoteHandler {
    * @param {import("@hapi/hapi").Request<Refs>} request
    * @param {import("@hapi/hapi").ResponseToolkit<Refs>} h
    */
-  static store(request, h) {
+  store(request, h) {
     const { title, tags, body } = request.payload;
 
-    const model = new Note();
-
     try {
-      const note = model.store({ title, tags, body });
+      const note = _this.model.store({ title, tags, body });
 
       return h.response({
         status: 'success',
@@ -55,11 +64,9 @@ class NoteHandler {
    * @param {import("@hapi/hapi").Request<Refs>} request
    * @param {import("@hapi/hapi").ResponseToolkit<Refs>} h
    */
-  static show(request, h) {
+  show(request, h) {
     const { id } = request.params;
-
-    const model = new Note();
-    const note = model.find(id);
+    const note = _this.model.find(id);
 
     if (note === undefined) {
       return h
@@ -81,14 +88,12 @@ class NoteHandler {
    * @param {import("@hapi/hapi").Request<Refs>} request
    * @param {import("@hapi/hapi").ResponseToolkit<Refs>} h
    */
-  static update(request, h) {
+  update(request, h) {
     const { id } = request.params;
     const { title, tags, body } = request.payload;
 
-    const model = new Note();
-
     try {
-      model.update(id, { title, tags, body });
+      _this.model.update(id, { title, tags, body });
 
       return h.response({
         status: 'success',
@@ -114,13 +119,11 @@ class NoteHandler {
    * @param {import("@hapi/hapi").Request<Refs>} request
    * @param {import("@hapi/hapi").ResponseToolkit<Refs>} h
    */
-  static destroy(request, h) {
+  destroy(request, h) {
     const { id } = request.params;
 
-    const model = new Note();
-
     try {
-      model.destroy(id);
+      _this.model.destroy(id);
 
       return h.response({
         status: 'success',

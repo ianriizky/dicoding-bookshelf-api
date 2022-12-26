@@ -1,5 +1,7 @@
 const NoteHandler = require('../handler/NoteHandler');
 
+const handler = new NoteHandler();
+
 /**
  * @template {import("@hapi/hapi").ReqRef} Refs
  * @type {import("@hapi/hapi").ServerRoute<Refs> | Array<import("@hapi/hapi").ServerRoute<Refs>>}
@@ -8,27 +10,27 @@ const routes = [
   {
     method: 'GET',
     path: '/notes',
-    handler: NoteHandler.index,
+    handler: handler.index,
   },
   {
     method: 'POST',
     path: '/notes',
-    handler: NoteHandler.store,
+    handler: handler.store,
   },
   {
     method: 'GET',
     path: '/notes/{id}',
-    handler: NoteHandler.show,
+    handler: handler.show,
   },
   {
     method: 'PUT',
     path: '/notes/{id}',
-    handler: NoteHandler.update,
+    handler: handler.update,
   },
   {
     method: 'DELETE',
     path: '/notes/{id}',
-    handler: NoteHandler.destroy,
+    handler: handler.destroy,
   },
 ];
 
