@@ -14,3 +14,9 @@ export type Payload = ModelPayload & {
 
 export type Resource = Payload & Timestamps;
 export type PartialResource = Partial<Resource>;
+
+export type Predicate = (
+  value: Resource,
+  index: number,
+  array: Array<Resource>
+) => Resource;

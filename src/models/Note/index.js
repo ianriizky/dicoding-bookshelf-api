@@ -18,6 +18,7 @@ class Note extends Model {
   }
 
   /**
+   * @param {import("./definition").Predicate} predicate
    * @returns {Array<import("./definition").Resource>}
    */
   filter(predicate) {
