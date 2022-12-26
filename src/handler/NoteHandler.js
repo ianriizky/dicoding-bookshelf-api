@@ -37,25 +37,20 @@ class NoteHandler {
     try {
       const note = _this.model.store({ title, tags, body });
 
-      return h.response({
-        status: 'success',
-        message: 'Catatan berhasil ditambahkan',
-        data: { noteId: note.id },
-      });
+      return h
+        .response({
+          status: 'success',
+          message: 'Catatan berhasil ditambahkan',
+          data: { noteId: note.id },
+        })
+        .code(201);
     } catch (error) {
-      if (error instanceof ModelNotFoundException) {
-        return h
-          .response({
-            status: 'fail',
-            message: 'Catatan gagal ditambahkan',
-          })
-          .code(500);
-      }
-
-      return h.response({
-        status: 'fail',
-        message: error.message,
-      });
+      return h
+        .response({
+          status: 'error',
+          message: 'Catatan gagal ditambahkan',
+        })
+        .code(500);
     }
   }
 
@@ -79,7 +74,7 @@ class NoteHandler {
 
     return {
       status: 'success',
-      data: { note },
+      data: { note: new NoteResource(note).toResource() },
     };
   }
 
@@ -101,16 +96,20 @@ class NoteHandler {
       });
     } catch (error) {
       if (error instanceof ModelNotFoundException) {
-        return h.response({
-          status: 'fail',
-          message: 'Gagal memperbarui catatan. Id tidak ditemukan',
-        });
+        return h
+          .response({
+            status: 'fail',
+            message: 'Gagal memperbarui catatan. Id tidak ditemukan',
+          })
+          .code(error.status);
       }
 
-      return h.response({
-        status: 'fail',
-        message: error.message,
-      });
+      return h
+        .response({
+          status: 'error',
+          message: 'Catatan gagal diperbarui',
+        })
+        .code(500);
     }
   }
 
@@ -131,16 +130,20 @@ class NoteHandler {
       });
     } catch (error) {
       if (error instanceof ModelNotFoundException) {
-        return h.response({
-          status: 'fail',
-          message: 'Catatan gagal dihapus. Id tidak ditemukan',
-        });
+        return h
+          .response({
+            status: 'fail',
+            message: 'Catatan gagal dihapus. Id tidak ditemukan',
+          })
+          .code(error.status);
       }
 
-      return h.response({
-        status: 'fail',
-        message: error.message,
-      });
+      return h
+        .response({
+          status: 'error',
+          message: 'Catatan gagal dihapus',
+        })
+        .code(500);
     }
   }
 }
