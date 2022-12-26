@@ -16,6 +16,7 @@ const init = async () => {
 
   await server.start();
 
+  // eslint-disable-next-line no-console
   console.log(`Listening on ${server.info.uri}`);
 };
 
