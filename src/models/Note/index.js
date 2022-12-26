@@ -7,7 +7,7 @@ const resources = [];
 
 class Note extends Model {
   constructor() {
-    super(resources);
+    super(resources, { name: 'Note' });
   }
 
   /**

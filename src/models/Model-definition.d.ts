@@ -18,3 +18,14 @@ export type Predicate = (
   index: number,
   array: Array<Resource>
 ) => Resource;
+
+export type Options = {
+  /** Model name. */
+  name: string;
+
+  /** Alias name for "createdAt". */
+  createdAt: string;
+
+  /** Alias name for "updatedAt". */
+  updatedAt: string;
+};

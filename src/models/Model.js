@@ -4,11 +4,16 @@ const ModelNotFoundException = require('../exceptions/ModelNotFoundException');
 class Model {
   /**
    * @param {Array<import("./Model-definition").Resource>} resources
-   * @param {string} name
+   * @param {import("./Model-definition").Options} options
    */
-  constructor(resources, name = 'Model') {
+  constructor(resources, options = {}) {
     this.resources = resources;
-    this.name = name;
+    this.options = {
+      name: 'Model',
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+      ...options,
+    };
   }
 
   all() {
@@ -52,15 +57,15 @@ class Model {
     /** @type {import("./Model-definition").Resource} */
     const resource = {
       id: nanoid(16),
-      createdAt,
-      updatedAt: createdAt,
+      [this.options.createdAt]: createdAt,
+      [this.options.updatedAt]: createdAt,
       ...payload,
     };
 
     this.resources.push(resource);
 
     if (!this.isExists(resource.id)) {
-      throw new ModelNotFoundException(this.name);
+      throw new ModelNotFoundException(this.options.name);
     }
 
     return resource;
@@ -72,12 +77,12 @@ class Model {
    */
   update(id, payload) {
     if (!this.isExists(id)) {
-      throw new ModelNotFoundException(this.name);
+      throw new ModelNotFoundException(this.options.name);
     }
 
     /** @type {import("./Model-definition").Resource} */
     const resource = {
-      updatedAt: new Date().toISOString(),
+      [this.options.updatedAt]: new Date().toISOString(),
       ...this.find(id),
       ...payload,
     };
@@ -92,7 +97,7 @@ class Model {
    */
   destroy(id) {
     if (!this.isExists(id)) {
-      throw new ModelNotFoundException(this.name);
+      throw new ModelNotFoundException(this.options.name);
     }
 
     this.resources.splice(this.findIndex(id), 1);
