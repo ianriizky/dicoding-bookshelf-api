@@ -1,0 +1,9 @@
+{
+  "editor.codeActionsOnSave": ["source.formatDocument", "source.fixAll.eslint"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "eslint.probe": ["javascript"],
+  "jest.autoRun": "off",
+  "jest.jestCommandLine": "npx dotenv -e .env.testing -e .env -- node_modules/.bin/jest --runInBand --logHeapUsage",
+  "vetur.validation.template": false
+}
